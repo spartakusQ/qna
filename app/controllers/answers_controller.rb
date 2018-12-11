@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
 
   before_action :find_question, only: [:new, :create]
-  before_action :find_answers, only: [:edit, :update, :destroy]
+  before_action :find_answer, only: [:edit, :update, :destroy]
 
   def new
     @answer = @question.answers.new
@@ -41,10 +41,10 @@ class AnswersController < ApplicationController
   end
 
   def answers_params
-    params.require(:answer).permit(:body, :question_id)
+    params.require(:answer).permit(:body)
   end
 
-  def find_answers
+  def find_answer
     @answer = Answer.find(params[:id])
   end
 
