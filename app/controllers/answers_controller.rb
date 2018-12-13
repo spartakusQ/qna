@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :find_question, only: [:new, :create]
   before_action :find_answer, only: [:edit, :update, :destroy]
 
@@ -13,6 +13,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.new(answers_params)
+    @answer.user = current_user
 
     if @answer.save
       redirect_to @question, notice: 'Your answers successfully created.'

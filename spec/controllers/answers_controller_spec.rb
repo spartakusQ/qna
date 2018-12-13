@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
+  let(:answer) { create(:answer, question: question, user: user) }
+  before { login(user) }
 
   describe 'GET #new' do
     before { get :new, params: { question_id: question } }
@@ -35,7 +37,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render new view path' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-        expect(response).to render_template :new
+        expect(response).to render_template 'questions/show'
       end
     end
   end
