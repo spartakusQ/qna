@@ -1,4 +1,7 @@
 h1 = @question.title
 p = @question.body
 
+= render 'answers/form'
+= render @question.answers
+
 = link_to 'Back', questions_path
