@@ -6,40 +6,56 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer, question: question, user: user) }
   before { login(user) }
 
-  describe 'GET #new' do
-    before { get :new, params: { question_id: question } }
-
-    it 'adding new answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'render new view' do
-      expect(response).to render_template :new
-    end
-  end
-
   describe 'POST #create' do
-    context 'with valid attributes' do
-      it 'save new answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+    context 'user at login in' do
+      before { login(user) }
+      let!(:question) { create(:question, user: user) }
+
+      context 'with valid attributes' do
+        it 'save new answer in the database' do
+          expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+        end
+
+        it 'redirect to question show view' do
+          post :create, params: { answer: attributes_for(:answer), question_id: question }
+          expect(response).to redirect_to assigns(:question)
+        end
       end
 
-      it 'redirect to question show view' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to assigns(:question)
+      context 'with invalid attributes' do
+        it 'not save the answer' do
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+        end
+
+        it 'render new view path' do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
+          expect(response).to render_template 'questions/show'
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      it 'not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+    context 'user at not login in' do
+      let!(:not_user) { create(:user) }
+      before { login(not_user) }
+
+      context 'with valid attributes' do
+        it 'save new answer in the database' do
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+        end
       end
 
-      it 'render new view path' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-        expect(response).to render_template 'questions/show'
+      context 'with invalid attributes' do
+        it 'not save the answer' do
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+        end
+
+        it 'render new view path' do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
+          expect(response).to render_template 'questions/show'
+        end
       end
     end
+
   end
 
   describe 'GET #edit' do
@@ -92,13 +108,33 @@ RSpec.describe AnswersController, type: :controller do
   describe 'DELETE #destroy' do
     before { answer }
 
-    it 'deletes the answer' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    context 'user an author' do
+      before { login(user) }
+      let!(:question) { create(:question, user: user) }
+
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question
+      end
+
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question
+    context 'user is not author' do
+      let!(:not_user) { create(:user) }
+
+      before { login(not_user) }
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question
+      end
     end
   end
 end
