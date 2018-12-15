@@ -3,9 +3,6 @@ class AnswersController < ApplicationController
   before_action :find_question, only: [:create]
   before_action :find_answer, only: [:edit, :update, :destroy]
 
-  def new
-  end
-
   def edit
   end
 
@@ -33,11 +30,10 @@ class AnswersController < ApplicationController
   if current_user.author?(@answer)
     @answer.destroy
     flash.notice = 'Answer successfully deleted.'
-    redirect_to_answer
   else
     flash.notice = 'Only author can delete answer.'
-    redirect_to_answer
   end
+  redirect_to_answer
 end
 
 

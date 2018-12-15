@@ -9,7 +9,6 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'user at login in' do
       before { login(user) }
-      let!(:question) { create(:question, user: user) }
 
       context 'with valid attributes' do
         it 'save new answer in the database' do
