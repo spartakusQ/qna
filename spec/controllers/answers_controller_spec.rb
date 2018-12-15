@@ -8,11 +8,15 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'POST #create' do
     context 'user at login in' do
-      before { login(user) }
 
       context 'with valid attributes' do
         it 'save new answer in the database' do
           expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+        end
+
+        it 'check for user log in answer author' do
+          post :create, params: { answer: attributes_for(:answer), question_id: question }
+          expect(assigns(:answer).user).to eq user
         end
 
         it 'redirect to question show view' do
