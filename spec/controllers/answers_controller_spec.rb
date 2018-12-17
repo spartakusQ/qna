@@ -11,17 +11,17 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with valid attributes' do
         it 'save new answer in the database' do
-          expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+          expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }.to change(question.answers, :count).by(1)
         end
 
         it 'check for user log in answer author' do
-          post :create, params: { answer: attributes_for(:answer), question_id: question }
+          post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
           expect(assigns(:answer).user).to eq user
         end
 
         it 'redirect to question show view' do
-          post :create, params: { answer: attributes_for(:answer), question_id: question }
-          expect(response).to redirect_to assigns(:question)
+          post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+          expect(response).to render_template :create
         end
       end
 
