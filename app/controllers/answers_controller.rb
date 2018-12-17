@@ -14,11 +14,8 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answers_params)
-      redirect_to question_path(@answer.question)
-    else
-      render :edit
-    end
+    @answer.update(answers_params)
+    @question = @answer.question
   end
 
   def destroy

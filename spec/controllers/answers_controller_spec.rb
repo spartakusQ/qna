@@ -75,35 +75,36 @@ RSpec.describe AnswersController, type: :controller do
 
 
   describe 'PATCH #update' do
+    let(:author) { create(:user) }
+    let!(:author_answer) { create(:answer, question: question, user: author) }
+
     context 'with valid attributes' do
-      it 'aasigns the requested answer to @answer' do
-        patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }
-        expect(assigns(:answer)).to eq answer
+      before { login(author) }
+
+      it 'changes answer attributes' do
+        patch :update, params: { id: author_answer, answer: { body: 'new body' } }, format: :js
+        author_answer.reload
+        expect(author_answer.body).to eq 'new body'
       end
 
-      it 'change answer attributes' do
-        patch :update, params: { id: answer, question_id: question, answer: { body: 'new body' } }
-        answer.reload
-
-        expect(answer.body).to eq 'new body'
-      end
-
-      it 'redirects to updated question' do
-        patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }
-        expect(response).to redirect_to question
+      it 'renders update view' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        expect(response).to render_template :update
       end
     end
 
     context 'with invalid attributes' do
-      before { patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer, :invalid) } }
-      it 'does not change question' do
-        answer.reload
+      before { login(author) }
 
-        expect(answer.body).to eq answer.body
+      it 'does not change answer attributes' do
+        expect do
+          patch :update, params: { id: author_answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        end.to_not change(author_answer, :body)
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 'renders update view' do
+        patch :update, params: { id: author_answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        expect(response).to render_template :update
       end
     end
   end
