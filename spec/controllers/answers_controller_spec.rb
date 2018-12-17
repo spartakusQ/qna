@@ -27,12 +27,12 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with invalid attributes' do
         it 'not save the answer' do
-          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
         end
 
         it 'render new view path' do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-          expect(response).to render_template 'questions/show'
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+          expect(response).to render_template :create
         end
       end
     end
@@ -43,18 +43,18 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with valid attributes' do
         it 'save new answer in the database' do
-          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
         end
       end
 
       context 'with invalid attributes' do
         it 'not save the answer' do
-          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
         end
 
         it 'render new view path' do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-          expect(response).to render_template 'questions/show'
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+          expect(response).to render_template :create
         end
       end
     end
