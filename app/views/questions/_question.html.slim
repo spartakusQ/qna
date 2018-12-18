@@ -1,4 +1,4 @@
-p= question.title
+p= link_to question.title, question_path(question)
 
 td= link_to 'Show', question_path(question)
 td= link_to 'Edit', edit_question_path(question)
