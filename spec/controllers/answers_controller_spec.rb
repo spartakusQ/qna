@@ -61,19 +61,6 @@ RSpec.describe AnswersController, type: :controller do
 
   end
 
-  describe 'GET #edit' do
-    before { get :edit, params: { id: answer } }
-
-    it 'editing the selected answer' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'render edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
-
   describe 'PATCH #update' do
     let(:author) { create(:user) }
     let!(:author_answer) { create(:answer, question: question, user: author) }
@@ -117,12 +104,12 @@ RSpec.describe AnswersController, type: :controller do
       let!(:question) { create(:question, user: user) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
       it 'redirects to index' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
 
     end

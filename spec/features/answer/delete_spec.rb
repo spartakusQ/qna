@@ -6,15 +6,18 @@ feature 'User(all) can delete answer' do
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: author) }
 
-  scenario 'Author delete answer' do
+  scenario 'Author delete answer', js: true do
     sign_in(author)
 
     visit question_path(question)
 
-    click_on 'Delete answer'
+    within '.answers' do
+      click_on 'Delete answer'
+      expect(page).to_not have_content answer.body
+    end
 
     expect(page).to have_content 'Answer successfully deleted.'
-    expect(page).to_not have_content answer.body
+
   end
 
   scenario 'Non author delete answer' do
