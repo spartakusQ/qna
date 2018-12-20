@@ -25,6 +25,11 @@ RSpec.describe AnswersController, type: :controller do
         end
       end
 
+      it 'assign created answer by current user' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+        expect(assigns(:answer).user).to eq user
+      end
+
       context 'with invalid attributes' do
         it 'not save the answer' do
           expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
@@ -125,6 +130,24 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to index' do
         delete :destroy, params: { id: answer }
         expect(response).to redirect_to question
+      end
+    end
+  end
+
+  describe 'PATCH #best' do
+    let(:author) { create(:user) }
+    let!(:answer) { create(:answer, question: question, user: author) }
+
+    context 'user an author answer' do
+      before { login(author) }
+      before { patch :best, params: { id: answer, format: :js } }
+
+      it 'assigns the request answer' do
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'renders answer best' do
+        expect(response).to render_template :best
       end
     end
   end

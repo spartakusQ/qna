@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
-  before_action :find_answer, only: [:update, :destroy]
+  before_action :find_answer, only: [:update, :destroy, :best]
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -22,6 +22,10 @@ class AnswersController < ApplicationController
       flash[:notice] = 'You not a author.'
       redirect_to @answer.question
     end
+  end
+
+  def best
+    @answer.best! if current_user.author?(@answer.question)
   end
 
 
