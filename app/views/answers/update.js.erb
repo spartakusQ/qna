@@ -1,5 +1,8 @@
-$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+<% answer_id = ".answer#{@answer.id}" %>
 
-<% if !@answer.errors.present? %>
-  $('.answers').html('<%= j render @question.answers %>');
+<% if @answer.errors.present? %>
+  $('<%= answer_id+"-errors" %>').prepend('<%= render 'shared/errors', resource: @answer %>');
+<% else %>
+  $(".notice").html("<%=j flash[:notice] %>");
+  $('<%= answer_id %>').html('<%= j render @answer %>');
 <% end %>

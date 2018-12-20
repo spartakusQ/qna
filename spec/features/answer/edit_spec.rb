@@ -46,7 +46,7 @@ feature 'User can edit his answer', %q{
         click_on 'Save Edit'
 
         expect(page).to have_content answer.body
-        # expect(page).to have_content "Body can't be blank" selector does not see the error field
+        expect(page).to have_content "Body can't be blank"
         expect(page).to have_selector 'textarea'
       end
     end
