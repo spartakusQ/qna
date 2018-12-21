@@ -36,7 +36,7 @@ feature 'Choose best answer', %q{
       end
     end
 
-    scenario 'best answer first on page' do
+    scenario 'best answer first in list' do
       expect(third_answer).to_not eq question.answers.first
 
       within(".answer#{third_answer.id}") do

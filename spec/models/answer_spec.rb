@@ -32,7 +32,7 @@ RSpec.describe Answer, type: :model do
       expect(question.answers.best.count).to eq 1
     end
 
-    it 'best answer is displayed first in the list' do
+    it 'best answer first in the list' do
       best_answer.best!
       expect(best_answer).to eq question.answers.first
     end

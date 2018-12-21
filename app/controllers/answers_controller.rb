@@ -13,6 +13,8 @@ class AnswersController < ApplicationController
     if current_user.author?(@answer)
       @answer.update(answers_params)
       @question = @answer.question
+    else
+      head :forbidden
     end
   end
 
