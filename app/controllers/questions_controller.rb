@@ -28,7 +28,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params) if current_user.author?(@question)
+    if current_user.author?(@question)
+      @question.update(question_params)
+    else
+      render :status => :forbidden, :text => "Only author can update question."
+    end
   end
 
   def destroy

@@ -7,7 +7,7 @@ RSpec.describe Answer, type: :model do
 
   it { should validate_presence_of :body }
 
-  describe 'best answer' do
+  describe '#best!' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let!(:best_answer) { create(:answer, question: question, user: user, best: true) }
@@ -32,7 +32,7 @@ RSpec.describe Answer, type: :model do
       expect(question.answers.best.count).to eq 1
     end
 
-    it 'best answer first on page' do
+    it 'best answer is displayed first in the list' do
       best_answer.best!
       expect(best_answer).to eq question.answers.first
     end

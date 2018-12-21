@@ -28,6 +28,7 @@ feature 'Choose best answer', %q{
         click_on 'Choose the best'
 
         expect(page).to_not have_link 'Choose the best'
+        expect(page).to have_content 'BestAnswer'
       end
 
       within(".answer#{second_answer.id}") do
@@ -44,6 +45,7 @@ feature 'Choose best answer', %q{
         expect(page).to_not have_link 'Choose the best'
       end
 
+      third_answer.reload
       expect(third_answer).to eq question.answers.first
     end
   end
