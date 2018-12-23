@@ -37,16 +37,20 @@ feature 'Choose best answer', %q{
     end
 
     scenario 'best answer first in list' do
-      expect(third_answer).to_not eq question.answers.first
+      expect(third_answer).to_not have_link 'Choose the best'
 
       within(".answer#{third_answer.id}") do
         click_on 'Choose the best'
 
         expect(page).to_not have_link 'Choose the best'
+        expect(page).to have_content 'BestAnswer'
       end
 
-      third_answer.reload
-      expect(third_answer).to eq question.answers.first
+      within(".answers div:first-child") do
+        expect(page).to have_content third_answer.body
+      end
+
+      expect(page.find(".answer#{third_answer.id}")).to have_content 'BestAnswer'
     end
   end
 end
