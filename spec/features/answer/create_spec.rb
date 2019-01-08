@@ -8,27 +8,44 @@ feature 'User can create answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
 
-  scenario 'Authenticated user answer the question', js: true do
-    sign_in(user)
+  describe 'Authenticated user', js: true do
+    scenario 'answer the question' do
+      sign_in(user)
 
-    visit question_path(question)
+      visit question_path(question)
 
-    fill_in 'Answer', with: 'My answer'
-    click_on 'Answer'
+      fill_in 'Answer', with: 'My answer'
+      click_on 'Answer'
 
-    expect(current_path).to eq question_path(question)
-    within '.answers' do
-      expect(page).to have_content 'My answer'
+      expect(current_path).to eq question_path(question)
+      within '.answers' do
+        expect(page).to have_content 'My answer'
+      end
     end
-  end
 
-  scenario 'answer the question with error', js: true do
-    sign_in(user)
-    visit question_path(question)
 
-    click_on 'Answer'
+    scenario 'answer the question with add files' do
+      sign_in(user)
 
-    expect(page).to have_content "Body can't be blank"
+      visit question_path(question)
+
+      fill_in 'Answer', with: 'My answer'
+
+      attach_file 'File', ["#{Rails.root.join('spec/rails_helper.rb')}", "#{Rails.root.join('spec/spec_helper.rb').to_s}"]
+      click_on 'Answer'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+    end
+
+    scenario 'answer the question with error', js: true do
+      sign_in(user)
+      visit question_path(question)
+
+      click_on 'Answer'
+
+      expect(page).to have_content "Body can't be blank"
+    end
   end
 
   scenario 'non authenticated user answer a question' do
