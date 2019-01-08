@@ -1,17 +1,5 @@
 .question
-  .question-title = @question.title
-  .question-body = @question.body
-  .question-errors
-
-
-  - if @question.files.attached?
-    - @question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
-
-  - if current_user&.author?(@question)
-    = link_to 'Edit question', '#', class: 'edit-question-link'
-    = link_to 'Delete question', question_path(@question), method: :delete
-    = render 'form'
+  = render @question
 
 
 .answers
