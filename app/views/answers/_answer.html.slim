@@ -10,7 +10,10 @@ div class = "answer#{answer.id}"
 
     - if answer.files.attached?
       - answer.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
+        div class = "attachment-#{file.id}"
+          p= link_to file.filename.to_s, url_for(file)
+          - if current_user&.author?(answer)
+            = link_to 'remove', attachment_path(file), class: 'delete-attachment-link', remote: true, method: :delete
 
     - if current_user&.author?(answer)
       p= link_to 'Edit', '#answer_id', class: 'edit-answer-link', data: { answer_id: answer.id }
