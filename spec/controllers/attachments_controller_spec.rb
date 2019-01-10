@@ -17,7 +17,7 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: question.files.first }, format: :js}.to change(ActiveStorage::Attachment, :count).by(-1)
       end
 
-      it 're-render question show' do
+      it 'return to form question after deletion' do
         delete :destroy, params: { id: question.files.first }, format: :js
         expect(response).to render_template :destroy
       end
@@ -26,7 +26,7 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: answer.files.first }, format: :js }.to change(ActiveStorage::Attachment, :count).by(-1)
       end
 
-      it 're-render question show' do
+      it 'return to answer form after deletion' do
         delete :destroy, params: { id: answer.files.first }, format: :js
         expect(response).to render_template :destroy
       end
@@ -35,11 +35,11 @@ RSpec.describe AttachmentsController, type: :controller do
     context 'user not author' do
       before { login(user) }
 
-      it 'delete the question attachment' do
+      it 'try delete the question attachment' do
         expect { delete :destroy, params: { id: question.files.first }, format: :js}.to_not change(ActiveStorage::Attachment, :count)
       end
 
-      it 'delete the answer attachment' do
+      it 'try delete the answer attachment' do
         expect { delete :destroy, params: { id: answer.files.first }, format: :js}.to_not change(ActiveStorage::Attachment, :count)
       end
     end
