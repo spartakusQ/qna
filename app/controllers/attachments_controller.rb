@@ -6,7 +6,7 @@ class AttachmentsController < ApplicationController
     if current_user.author?(@attachment.record)
       @attachment.purge
     else
-      redirect_to @question
+      redirect_to questions_path
     end
   end
 
