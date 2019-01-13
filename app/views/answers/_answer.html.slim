@@ -11,7 +11,10 @@ div class = "answer#{answer.id}"
       p Links:
       ul
         - answer.links.each do |link|
-          li= link_to link.name, link.url
+          div class = "link#{link.id}"
+            li= link_to link.name, link.url, target: :blank
+            - if current_user&.author?(answer)
+              = link_to 'remove', link_path(link), class: 'delete-link-link', remote: true, method: :delete
 
     - if answer.files.attached?
       - answer.files.each do |file|

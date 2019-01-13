@@ -17,7 +17,7 @@ feature 'User can add links to answer', %q{
 
     fill_in 'Answer', with: 'My answer'
 
-    fill_in 'Link name', with: 'My gist'
+    fill_in 'Link', with: 'My gist'
     fill_in 'Url', with: gist_url
 
     click_on 'Answer'
