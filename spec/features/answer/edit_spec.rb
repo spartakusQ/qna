@@ -60,8 +60,26 @@ feature 'User can edit his answer', %q{
         expect(page).to have_link 'spec_helper.rb'
       end
     end
-  end
 
+    scenario 'when editing the answer can add new links' do
+      sign_in user
+      visit question_path(question)
+
+      click_on 'Edit'
+
+      within '.answers' do
+        click_on 'add link'
+
+        fill_in 'Link', with: 'github'
+        fill_in 'Url', with: "https://github.com/"
+
+        click_on 'Save'
+
+        expect(page).to have_link 'github', href: "https://github.com/"
+        expect(page).to_not have_selector 'textfield'
+      end
+    end
+  end
 
   scenario 'edits with errors', js: true do
     sign_in user

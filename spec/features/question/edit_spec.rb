@@ -66,6 +66,25 @@ feature 'User can edit his question', %q{
       end
     end
 
+    scenario 'when editing the question can add new links', js: true do
+      sign_in user
+      visit question_path(question)
+
+      click_on 'Edit question'
+
+      within '.question' do
+        click_on 'add link'
+
+        fill_in 'Link', with: 'github'
+        fill_in 'Url', with: "http://github.com"
+
+        click_on 'Save'
+
+        expect(page).to have_link 'github', href: "http://github.com"
+        expect(page).to_not have_selector 'textfield'
+      end
+    end
+
     scenario 'edits his question with errors', js: true do
       sign_in user
       visit question_path(question)

@@ -21,11 +21,20 @@ div class = "answer#{answer.id}"
     - if current_user&.author?(answer)
       p= link_to 'Edit', '#answer_id', class: 'edit-answer-link', data: { answer_id: answer.id }
       p= link_to 'Delete answer', answer_path(answer), class: 'delete-answer-link', remote: true, method: :delete, data: {answer_id: answer.id}
+
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-      = f.label :body, 'Your answer'
-      = f.text_area :body
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-      = f.submit 'Save Edit'
+      p
+        = f.label :body, 'Your answer'
+        = f.text_area :body
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true, direct_upload: true
+      p Links:
+      p
+        = f.fields_for :links do |l|
+        .links
+          = link_to_add_association 'add link', f, :links
+        p
+        = f.submit 'Save Edit'
     - if current_user&.author?(answer.question) && !answer.best?
       p= link_to 'Choose the best', best_answer_path(answer), class: 'best-answer-link', remote: true, method: :patch
