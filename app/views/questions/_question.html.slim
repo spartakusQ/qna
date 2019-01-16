@@ -2,6 +2,12 @@
 .question-body = @question.body
 .question-errors
 
+- if question.badge.present?
+  .badge
+    p Badge:
+    = image_tag question.badge.image, title: question.badge.title, size: "70x70"
+    p = question.badge.title
+
 .links
   p Links:
   ul

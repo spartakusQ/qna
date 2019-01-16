@@ -26,6 +26,21 @@ feature 'User can create question', %q{
       expect(page).to have_content user.questions.last.body
     end
 
+    scenario 'ask question with badge' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
+
+      fill_in 'Badge title', with: 'That best answer'
+      attach_file 'Add a badge?', Rails.root.join('app/assets/images/badges/budges_ok.png').to_s
+      # page.attach_file('Image', Rails.root + 'app/assets/images/badges/budges_ok.png')
+
+
+      click_on 'Ask'
+
+      expect(page).to have_content 'That best answer'
+      expect(page).to have_css("img[src*='budges_ok.png']")
+    end
+
     scenario 'asks a question with errors' do
       click_on 'Ask'
 
