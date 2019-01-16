@@ -136,7 +136,10 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #best' do
     let(:author) { create(:user) }
-    let!(:answer) { create(:answer, question: question, user: author) }
+    let(:answer_author) { create(:user) }
+    let!(:new_question) { create(:question, user: author) }
+    let!(:badge) { create(:badge, question: new_question) }
+    let!(:answer) { create(:answer, question: new_question, user: answer_author) }
 
     context 'user an author answer' do
       before { login(author) }
@@ -144,6 +147,10 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'assigns the request answer' do
         expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assigns the question badge to user badge' do
+        expect(badge).to eq answer_author.badges.last
       end
 
       it 'renders answer best' do

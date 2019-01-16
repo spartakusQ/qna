@@ -20,6 +20,7 @@ class Answer < ApplicationRecord
     transaction do
       question.answers.best.update_all(best: false)
       update!(best: true)
+      user.award_badge!(question.badge) if question.badge.present?
     end
   end
 

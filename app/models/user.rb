@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :questions
   has_many :answers
+  has_many :badges
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -9,6 +10,10 @@ class User < ApplicationRecord
 
   def author?(obj)
     obj.user_id == id
+  end
+
+  def award_badge!(badge)
+    badges << badge
   end
 
 end
