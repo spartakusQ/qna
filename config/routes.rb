@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     resources :answers, only: [:create, :edit, :update, :destroy] do
       patch :best, on: :member
     end
+    member do
+      post :rating_up
+      post :rating_down
+    end
   end
 
   resources :attachments, only: :destroy

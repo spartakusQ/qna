@@ -1,0 +1,4 @@
+div class = "rate #{resource.class}-#{resource.id}"
+  =<> link_to '+', rating_up_question_path(@question),  method: :post
+  =<> @question.votes.pluck(:rating).sum
+  =<> link_to '-', rating_down_question_path(@question), method: :post

@@ -6,19 +6,26 @@ feature 'User can vote for the question', %q{
   I'd like to be able to vote for the question
 } do
 
-  given(:user) {  create(:user) }
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
-  background do
-    sign_in(user)
-    visit question_path(question)
-  end
+  describe 'Authenticated user', js: true do
+    before { sign_in(user) }
+    before { visit question_path(question) }
 
-  scenario 'Authenticated user try to vote for the question' do
-    within('.question') do
-      click_on '+'
-      expect(page).to have_content '1'
+    scenario 'try to vote for the question' do
+      within('.question') do
+        click_on '+'
+        expect(page).to have_content '1'
+      end
+    end
+
+    scenario 'try to vote for the question two times' do
+      within('.question') do
+        click_on '+'
+        click_on '+'
+        expect(page).to have_content '1'
+      end
     end
   end
-
 end
