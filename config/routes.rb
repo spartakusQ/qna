@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
 
   devise_for :users
-  resources :questions, shallow: true do
-    resources :answers, only: [:create, :edit, :update, :destroy] do
-      patch :best, on: :member
-    end
+
+  concern :votable do
     member do
-      post :rating_up
-      post :rating_down
+      post :rating_up, :rating_down
+    end
+  end
+  
+  resources :questions, concerns: :votable, shallow: true do
+    resources :answers, concerns: :votable, only: [:create, :edit, :update, :destroy] do
+      patch :best, on: :member
     end
   end
 

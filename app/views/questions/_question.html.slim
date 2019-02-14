@@ -2,6 +2,10 @@
 .question-body = @question.body
 .question-errors
 
+
+.vote
+  = render 'shared/vote', resource: question
+
 - if question.badge.present?
   .badge
     p Badge:

@@ -1,6 +1,8 @@
 class Answer < ApplicationRecord
   ANSWERS_COUNT = 1
 
+  include Votable
+
   belongs_to :question
   belongs_to :user
 
