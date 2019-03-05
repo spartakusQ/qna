@@ -22,7 +22,7 @@ feature 'User can vote for the question', %q{
       end
     end
 
-    scenario 'non author can vote up', js: true do
+    scenario 'non author can vote up' do
       sign_in(any_auth_user)
       visit question_path(question)
 
@@ -30,6 +30,30 @@ feature 'User can vote for the question', %q{
         find('.vote-up-button').click
 
         expect(page).to have_content '1'
+      end
+    end
+
+    scenario 'non author can vote up only once' do
+      sign_in(any_auth_user)
+      visit question_path(question)
+
+      within '.vote' do
+        find('.vote-up-button').click
+
+        expect(page).to_not have_link '+'
+        expect(page).to have_content '1'
+      end
+    end
+
+    scenario 'non author can vote down only once' do
+      sign_in(any_auth_user)
+      visit question_path(question)
+
+      within '.vote' do
+        find('.vote-down-button').click
+        
+        expect(page).to_not have_link '-'
+        expect(page).to have_content '-1'
       end
     end
 

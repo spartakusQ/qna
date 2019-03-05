@@ -43,6 +43,28 @@ feature 'User can vote for the answer', %q{
       end
     end
 
+    scenario 'non author can vote up only once' do
+      sign_in(any_auth_user)
+      visit question_path(question)
+
+      within ".answer#{answer.id}" do
+        click_on '+'
+        expect(page).to_not have_link '+'
+        expect(page).to have_content '1'
+      end
+    end
+
+    scenario 'non author can vote down only once' do
+      sign_in(any_auth_user)
+      visit question_path(question)
+
+      within ".answer#{answer.id}" do
+        click_on '-'
+        expect(page).to_not have_link '-'
+        expect(page).to have_content '-1'
+      end
+    end
+
     scenario "can't vote for self answer" do
       sign_in(author)
       visit question_path(question)
