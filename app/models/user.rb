@@ -17,4 +17,8 @@ class User < ApplicationRecord
     badges << badge
   end
 
+  def voted?(item)
+    votes.exists?(votable: item)
+  end
+
 end

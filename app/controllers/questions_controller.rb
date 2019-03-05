@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!, except: [:index, :show, :rating_up, :rating_down]
-  before_action :load_question, only: [:show, :edit, :update, :destroy, :rating_up, :rating_down]
+  before_action :load_question, only: [:show, :edit, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -45,20 +47,6 @@ class QuestionsController < ApplicationController
     else
       redirect_to @question, notice: 'Only author can delete question.'
     end
-  end
-
-  def rating_up
-      vote = @question.votes.build(rating: 1)
-      vote.user = current_user
-      vote.save
-      redirect_to question_path(@question)
-  end
-
-  def rating_down
-      vote = @question.votes.build(rating: -1)
-      vote.user = current_user
-      vote.save
-      redirect_to question_path(@question)
   end
 
   private

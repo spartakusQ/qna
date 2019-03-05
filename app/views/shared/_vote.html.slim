@@ -1,4 +1,7 @@
 div class = "rate #{resource.class}-#{resource.id}"
-  =<> link_to '+', rating_up_question_path(@question),  method: :post
-  =<> @question.votes.pluck(:rating).sum
-  =<> link_to '-', rating_down_question_path(@question), method: :post
+  span.rating
+    =  "rating: #{resource.rating_sum}"
+    - unless current_user&.author?(resource)
+      span.voting class = "#{'hidden' if current_user&.voted?(resource)}"
+        = link_to '+', polymorphic_path(resource, action: :rating_up), method: :post, remote: true, data: { type: :json }, class: 'vote-up-button'
+        = link_to '-', polymorphic_path(resource, action: :rating_down), method: :post, remote: true, data: { type: :json }, class: 'vote-down-button'

@@ -7,6 +7,10 @@ div class = "answer#{answer.id}"
         p= answer.body
     - else
         p= answer.body
+
+    .vote
+      = render 'shared/vote', resource: answer
+      
     .links
       p Links:
       ul

@@ -155,34 +155,4 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-
-
-  describe "POST #rating_up" do
-    context "user can vote up" do
-      before { login(user) }
-      let!(:question) { create(:question, user: user) }
-
-      it 'vote up' do
-        expect { post :rating_up, params: { id: question } }.to change(question.votes, :count).by(1)
-      end
-
-      it 'try vote two times from one question' do
-        post :rating_down, params: { id: question }
-        expect { post :rating_down, params: { id: question } }.to_not change(Vote, :count)
-      end
-    end
-  end
-
-  describe "POST #rating_down" do
-    context "user can vote down" do
-      before { login(user) }
-      let!(:question) { create(:question, user: user) }
-      let!(:vote) { create(:vote, votable: question, user: user) }
-
-
-      it 'vote down' do
-        expect { post :rating_down, params: { id: question } }.to change(question.votes, :count).by(0)
-      end
-    end
-  end
 end
