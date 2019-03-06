@@ -16,7 +16,7 @@ feature 'User can vote for the question', %q{
       sign_in(author)
       visit question_path(question)
 
-      within '.question, .vote' do
+      within '.vote' do
         expect(page).to_not have_link '+'
         expect(page).to_not have_link '-'
       end
@@ -84,7 +84,7 @@ feature 'User can vote for the question', %q{
       sign_in(author)
       visit question_path(question)
 
-      within '.question, .vote' do
+      within '.vote' do
         expect(page).to_not have_link '+'
         expect(page).to_not have_link '-'
       end

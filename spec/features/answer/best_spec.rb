@@ -46,7 +46,7 @@ feature 'Choose best answer', %q{
         expect(page).to have_content 'BestAnswer'
       end
 
-      within(".answers div:first-child") do
+      within(".answers, .best") do
         expect(page).to have_content third_answer.body
       end
 

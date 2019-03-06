@@ -3,12 +3,13 @@ div class = "rate #{resource.class}-#{resource.id}"
     =  "rating: #{resource.rating_sum}"
 
   span.voting class = "#{'hidden' if current_user&.voted?(resource)}"
-    = link_to '+', polymorphic_path(resource, action: :rating_up),
-     method: :post, remote: true, data: { type: :json },
-     class: 'vote-up-button'
-    = link_to '-', polymorphic_path(resource, action: :rating_down),
-     method: :post, remote: true, data: { type: :json },
-     class: 'vote-down-button'
+    - unless current_user&.author?(resource)
+      = link_to '+', polymorphic_path(resource, action: :rating_up),
+       method: :post, remote: true, data: { type: :json },
+       class: 'vote-up-button'
+      = link_to '-', polymorphic_path(resource, action: :rating_down),
+       method: :post, remote: true, data: { type: :json },
+       class: 'vote-down-button'
 
   span.revote
     = link_to 'revote', polymorphic_path(resource, action: :revote),

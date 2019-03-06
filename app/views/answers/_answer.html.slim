@@ -2,12 +2,13 @@ div class = "answer#{answer.id}"
   div class = "answer#{answer.id}-errors"
   - if answer.persisted?
     - if answer.best?
-      .best_answer
-        h1= 'BestAnswer'
-        p= answer.body
+      div class = "best#{answer.id}"
+        .best_answer
+          h1= 'BestAnswer'
+          p= answer.body
     - else
         p= answer.body
-  - unless current_user&.author?(answer)
+
     .vote
       = render 'shared/vote', resource: answer
 
@@ -15,6 +16,7 @@ div class = "answer#{answer.id}"
       p Links:
       ul
         = render answer.links, resource: answer
+
     - if answer.files.attached?
       - answer.files.each do |file|
         div class = "attachment-#{file.id}"
