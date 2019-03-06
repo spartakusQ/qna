@@ -2,7 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_votable, only: [ :rating_up, :rating_down]
+    before_action :set_votable, only: [ :rating_up, :rating_down, :revote]
   end
 
   def rating_up
@@ -15,6 +15,13 @@ module Voted
   def rating_down
     unless current_user.author?(@votable)
       @votable.rating_down(current_user)
+      render_json
+    end
+  end
+
+  def revote
+    unless current_user.author?(@votable)
+      @votable.votes.find_by(user_id: current_user)&.destroy
       render_json
     end
   end

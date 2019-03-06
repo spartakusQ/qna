@@ -5,9 +5,10 @@ Rails.application.routes.draw do
   concern :votable do
     member do
       post :rating_up, :rating_down
+      delete :revote
     end
   end
-  
+
   resources :questions, concerns: :votable, shallow: true do
     resources :answers, concerns: :votable, only: [:create, :edit, :update, :destroy] do
       patch :best, on: :member

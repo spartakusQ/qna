@@ -2,9 +2,9 @@
 .question-body = @question.body
 .question-errors
 
-
-.vote
-  = render 'shared/vote', resource: question
+- unless current_user&.author?(question)
+  .vote
+    = render 'shared/vote', resource: question
 
 - if question.badge.present?
   .badge

@@ -65,6 +65,20 @@ feature 'User can vote for the answer', %q{
       end
     end
 
+    scenario 'non author can revote' do
+      sign_in(any_auth_user)
+      visit question_path(question)
+
+      within ".answer#{answer.id}" do
+        click_on '+'
+        expect(page).to have_link 'revote'
+
+        click_on 'revote'
+        expect(page).to_not have_link 'revote'
+      end
+    end
+
+
     scenario "can't vote for self answer" do
       sign_in(author)
       visit question_path(question)

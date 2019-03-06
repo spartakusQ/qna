@@ -16,7 +16,7 @@ feature 'User can vote for the question', %q{
       sign_in(author)
       visit question_path(question)
 
-      within '.vote' do
+      within '.question, .vote' do
         expect(page).to_not have_link '+'
         expect(page).to_not have_link '-'
       end
@@ -51,7 +51,7 @@ feature 'User can vote for the question', %q{
 
       within '.vote' do
         find('.vote-down-button').click
-        
+
         expect(page).to_not have_link '-'
         expect(page).to have_content '-1'
       end
@@ -67,11 +67,24 @@ feature 'User can vote for the question', %q{
       end
     end
 
+    scenario 'non author can revote' do
+      sign_in(any_auth_user)
+      visit question_path(question)
+
+      within '.vote' do
+        find('.vote-down-button').click
+        expect(page).to have_link 'revote'
+
+        click_on 'revote'
+        expect(page).to_not have_link 'revote'
+      end
+    end
+
     scenario "can't vote for self answer" do
       sign_in(author)
       visit question_path(question)
 
-      within '.vote' do
+      within '.question, .vote' do
         expect(page).to_not have_link '+'
         expect(page).to_not have_link '-'
       end
